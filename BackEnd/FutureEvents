@@ -1,0 +1,116 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class FutureEvents {
+	
+	private int weeksInNode;							//the number of weeks each node represents
+	private LinkedList futureEvents;		//
+	private int firstNodeId = 500;					//the node index of the first node in the LinkedList.
+												//Increments: 1) HeadNode is deleted 2) Calendar refreshes
+												//Decrements: 1) A new node is added as head
+	
+	private int maxNodeSize = 25;
+	public FutureEvents(){
+		weeksInNode = PresentEvents.thresholdWeekReset;
+		futureEvents = new LinkedList(weeksInNode);
+	}
+	
+	/**
+	 * Add event based on id. Mod eventId by 100 is the position in 
+	 * @param eventId
+	 */
+	public void addEvent(BasicEvent event) throws IllegalArgumentException{
+		//assigns an id to the event based on its start time. id corresponds to its position
+		assignEventId(event);
+		int id = event.getId();
+		int nodeIndex = (int)((id-firstNodeId*1000)/10000)-100;
+		if(nodeIndex < 0){
+			throw new IllegalArgumentException("The id given has node index smaller than 0");
+		}else if(nodeIndex > futureEvents.getSizeCount()){		//need to create a new node as the event is larger than 
+			Calendar end = futureEvents.getTail().getFirstEventDate();
+			int weeks = PresentEvents.thresholdWeekReset;
+			end.add(Calendar.WEEK_OF_YEAR, weeks);
+			
+			List<BasicEvent> newList = new ArrayList<BasicEvent>();
+			newList.add(event);
+			Node newNode = new Node(newList, end);
+			futureEvents.addNode(newNode); 
+		}
+		int count = 0;
+		Node ctnNode = futureEvents.getHead();
+		while (count < nodeIndex){
+			ctnNode = ctnNode.getNext();
+		}
+		ctnNode.addEvent(event);
+	}
+	
+	/**
+	 * 
+	 * @param event
+	 */
+	public void assignEventId(BasicEvent event) throws IllegalArgumentException{
+		Calendar eStart = event.getStartTime();
+		if(futureEvents.getHead().getFirstEventDate().compareTo(eStart) >= 0){		
+			if(PresentEvents.lastEventDate.compareTo(eStart) < 0){	//needs to add new node and assign as head
+				firstNodeId--;
+				event.setId(firstNodeId*1000);
+				return;
+			}else{
+				throw new IllegalArgumentException("The param event belongs to present events, not future events");
+			}
+		}else{
+			Calendar end = futureEvents.getTail().getFirstEventDate();
+			int weeks = PresentEvents.thresholdWeekReset;
+			end.add(Calendar.WEEK_OF_YEAR, PresentEvents.thresholdWeekReset);
+			if(end.compareTo(eStart) < 0){			//if endTime of tail is before start time of event. 
+				if(futureEvents.getSizeCount() < maxNodeSize){ //Create new node and set tail to new node Add new node to tail
+					event.setId(firstNodeId*1000+futureEvents.getSizeCount()*10000);
+				}
+				event.setId(firstNodeId*1000+(futureEvents.getSizeCount()-1)*10000);
+				return;
+			}
+		}
+		int count = 0;
+		Node ctnNode = futureEvents.getHead();
+		while(ctnNode.getFirstEventDate().compareTo(eStart) < 0){
+			ctnNode = ctnNode.getNext();
+			count++;
+		}
+		event.setId(firstNodeId*1000+count*10000);	
+	}
+	
+	/**
+	 * Gets event based on the given id. id % 100 gives the position the event is in the futureEvents array base on startTime
+	 * @param id
+	 * @return
+	 * @throws EventNotFoundException
+	 */
+	public BasicEvent getEvent(int id) throws EventNotFoundException, IllegalArgumentException{
+		int nodeIndex = (int)(id/10000)-100;
+		if(nodeIndex < 0 || nodeIndex > futureEvents.getSizeCount()){
+			throw new IllegalArgumentException("The id given has node index exceeding futureEvents size or smaller than 0");
+		}
+		int count = 0;
+		Node ctnNode = futureEvents.getHead();
+		while(count < nodeIndex){
+			ctnNode = ctnNode.getNext();
+		}
+		int eventIndex = id % 10000;
+		return ctnNode.getEvent(eventIndex, id);
+	}
+	
+	
+	/**
+	 * Resets the futureEvents array based on thresholdWeekReset
+	 * 1. moves events corresponding to present Events array to history events
+	 * 2. shifts all events forward
+	 */
+	public void resetCalendar(){
+		int resetWeeks = PresentEvents.thresholdWeekReset;
+		
+		
+	}
+	
+	
+}
