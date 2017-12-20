@@ -1,0 +1,62 @@
+import java.util.Calendar;
+
+public class LinkedList {
+	
+	private Node head;
+	private Node tail;
+	private Node cursor;
+	private int sizeCount;
+	private int weeksInNode;
+	
+	public LinkedList(int weeksInNode){
+		head = null;
+		tail = null;
+		cursor = null;
+		sizeCount = 0;
+		this.weeksInNode = weeksInNode;
+	}
+	
+	public void addNode(Node n) throws IllegalArgumentException{
+		if(n.isNull()){
+			throw new IllegalArgumentException("The param data is null");
+		}
+		if(head == null){
+			head = n;
+			tail = n;
+			cursor = n;
+		}else if(head.compareTo(n) >= 0){
+			n.setNext(head);
+			head = n;
+		}else if(tail.compareTo(n) <= 0){
+			tail.setNext(n);
+			tail = n;
+		}else{
+			Node ctnNode = head.getNext();
+			while(ctnNode.compareTo(n) < 0){
+				cursor = ctnNode;
+				ctnNode = ctnNode.getNext();
+			}
+			cursor.setNext(n);
+			n.setNext(ctnNode);
+		}
+		sizeCount++;
+	}
+	
+	
+	public Node getCursor(){
+		return cursor;
+	}
+	
+	public Node getHead(){
+		return head;
+	}
+	
+	public Node getTail(){
+		return tail;
+	}
+	
+	public int getSizeCount(){
+		return sizeCount;
+	}
+
+}
