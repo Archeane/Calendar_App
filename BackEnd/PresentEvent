@@ -1,0 +1,60 @@
+import java.util.Calendar;
+
+public class PresentEvents {
+/**
+ * 2-D array containing m minute time slots for events spanning over n week period. 
+ * A time slot is true if the person is free at this time. False if person has an event
+ * 		Future: false accounted for travel time and sleep schedule
+ * 
+ * Gets reset once the reset period passes. 
+ */
+	
+	private int thresholdWeeks;       //number of weeks the present events holds.
+	static int thresholdWeekReset;   //number of weeks it takes to reset the first day
+	private int timeSlotLength;       //length of time for time slots measured in minutes
+	
+	private boolean[][] presentEvents;
+	
+	private FutureEvents futureEvents;
+	
+	static Calendar firstEventDate;
+	static Calendar lastEventDate;
+	
+	public PresentEvents(int thresholdWeeks, int thresholdWeekReset, int timeSlotLength){
+		this.thresholdWeekReset = thresholdWeekReset;
+		this.thresholdWeeks = thresholdWeekReset;
+		this.timeSlotLength = timeSlotLength;
+		
+		int numOfTimeSlots = 24 * 60/timeSlotLength;
+		
+		presentEvents = new boolean[numOfTimeSlots][thresholdWeeks];
+		
+		futureEvents = new FutureEvents();
+	}
+
+	
+	/**
+	 * Resets the calendar to the new starting date. 
+	 * 1. Remove and adds all events to history events
+	 * 2. Moves all events forward
+	 * 3. Inputs new events to the calendar
+	 */
+	public void resetCalendar(){
+		/*
+		for()
+		futureEvents.removeEvent();
+		*/
+		
+		int dayCounter = 0;
+		for(int i = thresholdWeekReset*7; i < presentEvents.length; i++){
+			presentEvents[dayCounter] = presentEvents[i];
+			dayCounter++;
+		}
+		
+		//addEvent();
+	}
+	
+	public Calendar getLastEventDate(){
+		return lastEventDate;
+	}
+}
