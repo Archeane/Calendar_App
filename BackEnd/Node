@@ -1,0 +1,156 @@
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+/**
+ * Test cases:
+ * 
+ * @author Jenny
+ *
+ */
+
+
+public class Node {
+	
+	private List<BasicEvent> data;
+	private Node next;
+	private Calendar firstEventDate;			//stores the time corresponding to the earliest event that can be stored in the node
+	
+	
+	public Node(){
+		data = null;
+		next = null;
+	}
+	
+	public Node(List<BasicEvent> initData, Calendar firstEventDate) throws IllegalArgumentException{
+		if(initData == null){
+			throw new IllegalArgumentException("The initData passed into the node is null");
+		}
+		next = null;
+		data = initData;
+		this.firstEventDate = firstEventDate;
+	}
+	
+	/**
+	 * Test cases: 
+	 * 1. next node has a node
+	 * 2. next node is null
+	 * @return
+	 */
+	public Node getNext() throws NullPointerException{
+		if(next == null){
+			throw new NullPointerException("The next node is null");
+		}
+		return next;
+	}
+	
+	/**
+	 *  
+	 * @return
+	 */
+	public List<BasicEvent> getData(){
+		return data;
+	}
+	
+	public void setNext(Node next){
+		this.next = next;
+	}
+	
+	public void setData(List<BasicEvent> data){
+		this.data = data;
+	}
+	
+	/**
+	 * Adds to the id of the event the position of the event within this node
+	 * @param event
+	 * @throws IllegalArgumentException
+	 * 
+	 * test cases:
+	 * 	
+	 */
+	public void addEvent(BasicEvent event) throws IllegalArgumentException{
+		if(isThisNode(event)){
+			if(event.getStartTime().compareTo(data.get(0).getStartTime()) < 0){
+				data.add(0, event);
+			}
+			for(int i = 0; i < data.size(); i++){
+				if(data.get(i).getStartTime().compareTo(event.getStartTime()) > 0){
+					data.add(i, event);
+					event.addToId(i);
+				}
+			}
+		}else{
+			throw new IllegalArgumentException("The param event does not belong to this node " + toString());
+		}
+	}
+	
+	public void deleteEvent(int id) throws IllegalArgumentException{
+		for(int i = 0; i < data.size(); i++){
+			if(data.get(i).getId() == id){
+				data.remove(i);
+				return;
+			}
+		}
+		throw new IllegalArgumentException("The param id is not found in the node "+toString());
+	}
+	
+	public BasicEvent getEvent(int index, int id) throws EventNotFoundException{
+		if(data.get(index) == null){
+			for(int i = 0; i < data.size(); i++){
+				if(data.get(i).getId() == id){
+					return data.get(i);
+				}
+			}
+			throw new EventNotFoundException("Event not found at given index, nor was found in the node "+ toString());
+		}
+		return data.get(index);
+	}
+	
+	/**
+	 * Determines whether the event belongs in the node by comparing the events start time with the start and end time of this node
+	 * @param e
+	 * @return
+	 * 		true if param event has a start time that falls in the range of this node
+	 * test cases:
+	 * 1. param event is in the node - true
+	 * 2. param event has start time earlier than node - false
+	 * 3. param event has end time later than node - false
+	 */
+	public boolean isThisNode(BasicEvent e){
+		Calendar end = firstEventDate;
+		int weeks = PresentEvents.thresholdWeekReset;
+		end.add(Calendar.WEEK_OF_YEAR, 9);
+		return e.getStartTime().compareTo(firstEventDate) > 0 && e.getStartTime().compareTo(end) < 0;
+	}
+	
+	/**
+	 * Compares a node to another node based on their first event startTime
+	 * @param n
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	public int compareTo(Node n) throws IllegalArgumentException{
+		if(n == null){
+			throw new IllegalArgumentException("The param node is null");
+		}
+		if(n.getData() == null){
+			throw new IllegalArgumentException("The param node has a null data");
+		}
+		return firstEventDate.compareTo(n.firstEventDate);
+	}
+	
+	public String toString(){
+		if(data == null){
+			return "This node is null. The next Node is "+next.toString();
+		}
+		return "First Event in node is "+ data.get(0).toString() +", last event is "+ data.get(data.size()-1).toString();
+	}
+	
+	public boolean isNull(){
+		return data == null;
+	}
+	
+	public Calendar getFirstEventDate(){
+		return firstEventDate;
+	}
+}
