@@ -1,0 +1,36 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class EventsTester {
+	
+	public static void main(String[] args){
+		PresentEvents dump = new PresentEvents(2,2,24);
+		FutureEvents temp = new FutureEvents();
+		
+		List<BasicEvent> list1 = new ArrayList<BasicEvent>();
+		List<BasicEvent> list2 = new ArrayList<BasicEvent>();
+		List<BasicEvent> list3 = new ArrayList<BasicEvent>();
+		List<BasicEvent> list4 = new ArrayList<BasicEvent>();
+		List<BasicEvent> list5 = new ArrayList<BasicEvent>();
+		
+		Calendar time0 = Calendar.getInstance();
+		Calendar time1 = Calendar.getInstance();
+		time1.add(Calendar.DAY_OF_YEAR, 1);
+		Calendar time2 = Calendar.getInstance();
+		time2.add(Calendar.WEEK_OF_YEAR, 1);
+		Calendar time3 = Calendar.getInstance();
+		time3.add(Calendar.WEEK_OF_YEAR, 2);
+		Calendar time4 = Calendar.getInstance();
+		time4.add(Calendar.WEEK_OF_YEAR, 10);
+		
+		Calendar time5 = Calendar.getInstance();
+		time5.add(Calendar.MINUTE, 40);
+		
+		list1.add(new BasicEvent(0, "event 1", time0, time5));
+		Node tempNode = new Node();
+		Node tempNode2 = new Node();
+		
+	}
+
+}
