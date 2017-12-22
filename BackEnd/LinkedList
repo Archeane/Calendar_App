@@ -16,6 +16,11 @@ public class LinkedList {
 		this.weeksInNode = weeksInNode;
 	}
 	
+	/**
+	 * Adds an node in sorted order by firstEventDate of each Node.
+	 * @param n
+	 * @throws IllegalArgumentException
+	 */
 	public void addNode(Node n) throws IllegalArgumentException{
 		if(n.isNull()){
 			throw new IllegalArgumentException("The param data is null");
@@ -59,4 +64,17 @@ public class LinkedList {
 		return sizeCount;
 	}
 
+	public String toString(){
+		String str = "";
+		if(sizeCount > 1){
+			Node ctnNode = head;
+			while(head != tail){
+				str += ctnNode.toString();
+				ctnNode = ctnNode.getNext();
+			}
+		}else if(sizeCount == 1){
+			str += head.toString();
+		}
+		return str;
+	}
 }
