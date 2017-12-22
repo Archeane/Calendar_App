@@ -1,0 +1,73 @@
+import java.util.Calendar;
+
+public class Utility {
+
+	public Utility(){}
+	
+	/**
+	 * Compares a node to another node based on their first event startTime
+	 * @param n	- this node
+	 * @param n1 - other nod
+	 * @return
+	 * 		0 if the firstEventDate are equal				PASS
+	 * 		1 if this node is greater than param node		PASS
+	 * 		-1 if this node is less than param node			PASS
+	 * @throws IllegalArgumentException
+	 * 		Indicates a node has null data			PASS
+	 * 		Indicates a node is null				PASS
+	 */
+	public int compare(Node n, Node n1) throws IllegalArgumentException{
+		if(n == null){
+			throw new IllegalArgumentException("The param node n is null");
+		}
+		if(n1 == null){
+			throw new IllegalArgumentException("The param node n1 is null");
+		}
+		if(n.getData() == null){
+			throw new IllegalArgumentException("The param node n has a null data");
+		}
+		if(n1.getData() == null){
+			throw new IllegalArgumentException("The param node n1 has a null data");
+		}
+		
+		long firstEventDateInMillis = n.getFirstEventDate().getTimeInMillis();
+		long nFirstEventDateInMillis = n1.getFirstEventDate().getTimeInMillis();
+		
+		//TODO: set this tolerance to a variable
+		long tolerance = 1800000; //30 minutes
+		if(firstEventDateInMillis + tolerance < nFirstEventDateInMillis){
+			return -1;
+		}else if(firstEventDateInMillis + tolerance == nFirstEventDateInMillis){
+			return 0;
+		}
+		return 1;
+	}
+
+	/**
+	 * Compares a Calendar object to another Calendar object with tolerance in mind 
+	 * @param n	- this Calendar
+	 * @param n1 - other Calendar
+	 * @return
+	 * 		0 if the firstEventDate are equal				PASS
+	 * 		1 if this node is greater than param node		PASS
+	 * 		-1 if this node is less than param node			PASS
+	 * @throws IllegalArgumentException
+	 * 		Indicates a node has null data			PASS
+	 * 		Indicates a node is null				PASS
+	 */
+	public int compare(int toleranceInMins, Calendar thisStartTime, Calendar otherStartTime) throws IllegalArgumentException{
+		if(thisStartTime == null || otherStartTime == null){
+			throw new IllegalArgumentException("The param calender is null");
+		}
+		long firstEventDateInMillis = thisStartTime.getTimeInMillis();
+		long nFirstEventDateInMillis = otherStartTime.getTimeInMillis();
+		
+		long tolerance = 60000 * toleranceInMins; 
+		if(Math.abs(firstEventDateInMillis-nFirstEventDateInMillis) <= tolerance){
+			return 0;
+		}else if(firstEventDateInMillis + tolerance < nFirstEventDateInMillis){
+			return -1;
+		}
+		return 1;
+	}
+}
