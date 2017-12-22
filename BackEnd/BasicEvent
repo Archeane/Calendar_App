@@ -10,11 +10,21 @@ public class BasicEvent {
 	
 	public BasicEvent(){}
 	
+	/**
+	 * TODO: Add a rule that a new id cannot be the same as a previous id
+	 * @param id
+	 * @param name
+	 * @param startTime
+	 * @param endTime
+	 */
 	public BasicEvent(int id, String name, Calendar startTime, Calendar endTime){
 		this.id = id;
 		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
+
+		Integer iId = new Integer(id);
+		EventProcessor.eventsDataBase.put(iId, this);
 	}
 	
 	public int getId(){
@@ -31,5 +41,9 @@ public class BasicEvent {
 	
 	public Calendar getStartTime(){
 		return startTime;
+	}
+	
+	public String toString(){
+		return name + " starts at time "+startTime.getTime()+", ends at time "+endTime.getTime();
 	}
 }
