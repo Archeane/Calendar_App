@@ -1,0 +1,159 @@
+import java.util.Calendar;
+
+public class EventsProcessor {
+	
+	private Calendar initTime;
+	
+	public static int initStartYear;
+	public static int initStartDay;
+	
+	public static FutureEvents futureEvents;
+	public static PresentEvents presentEvents;
+	
+	public EventsProcessor(){
+		initTime = Calendar.getInstance();
+		initStartYear = initTime.YEAR;
+		initStartDay = initTime.DAY_OF_YEAR;
+		
+		presentEvents = new PresentEvents(initTime, 14, 15);
+		futureEvents = new FutureEvents(5, 2017, 359);
+	}
+	
+	public static void main(String[] args){
+		Calendar initTime = Calendar.getInstance();
+		initStartYear = initTime.YEAR;
+		initStartDay = initTime.DAY_OF_YEAR;
+		
+		presentEvents = new PresentEvents(initTime, 14, 15);
+		futureEvents = new FutureEvents(5, 2017, 359);
+		
+		initialize();
+	}
+	
+	public static void initialize(){
+		Calendar day0 = Calendar.getInstance();
+		int day0Year = day0.get(Calendar.YEAR);
+		Calendar day1 = Calendar.getInstance();
+		Calendar day2 = Calendar.getInstance();
+		Calendar day3 = Calendar.getInstance();
+		Calendar day4 = Calendar.getInstance();
+		Calendar day5 = Calendar.getInstance();
+		Calendar day01 = Calendar.getInstance();
+		Calendar day02 = Calendar.getInstance();
+		Calendar day03 = Calendar.getInstance();
+		Calendar day04 = Calendar.getInstance();
+		Calendar day05 = Calendar.getInstance();
+		Calendar day11 = Calendar.getInstance();
+		Calendar day12 = Calendar.getInstance();
+		Calendar day13 = Calendar.getInstance();
+		Calendar day14 = Calendar.getInstance();
+		Calendar day15 = Calendar.getInstance();
+		Calendar day21 = Calendar.getInstance();
+		Calendar day22 = Calendar.getInstance();
+		Calendar day23 = Calendar.getInstance();
+		Calendar day31 = Calendar.getInstance();
+		Calendar day32 = Calendar.getInstance();
+		Calendar day33 = Calendar.getInstance();
+		Calendar day41 = Calendar.getInstance();
+		Calendar day42 = Calendar.getInstance();
+		Calendar day43 = Calendar.getInstance();
+		Calendar day44 = Calendar.getInstance();
+		Calendar day45 = Calendar.getInstance();
+		Calendar day51 = Calendar.getInstance();
+		Calendar day52 = Calendar.getInstance();
+		Calendar day53 = Calendar.getInstance();
+		Calendar day6 = Calendar.getInstance();
+		Calendar day61 = Calendar.getInstance();
+		Calendar day62 = Calendar.getInstance();
+		Calendar day63 = Calendar.getInstance();
+		
+		
+		day01.add(Calendar.MINUTE, 40);
+		day02.add(Calendar.HOUR, 3);
+		day03.add(Calendar.MINUTE, 240);
+		day04.add(Calendar.MINUTE, 300);
+		day05.add(Calendar.MINUTE, 400);
+		
+		day1.add(Calendar.DAY_OF_YEAR, 1);
+		day11.add(Calendar.DAY_OF_YEAR, 1);
+		day11.add(Calendar.HOUR, 5);
+		day12.add(Calendar.DAY_OF_YEAR, 1);
+		day12.add(Calendar.MINUTE, 360);
+		day13.add(Calendar.DAY_OF_YEAR, 1);
+		day13.add(Calendar.MINUTE, 400);
+		day14.add(Calendar.DAY_OF_YEAR, 1);
+		day14.add(Calendar.MINUTE, 480);
+		day15.add(Calendar.DAY_OF_YEAR, 1);
+		day15.add(Calendar.MINUTE, 600);
+	
+		day2.add(Calendar.WEEK_OF_YEAR, 1);
+		day21.add(Calendar.WEEK_OF_YEAR, 1);
+		day21.add(Calendar.HOUR, 1);
+		day22.add(Calendar.WEEK_OF_YEAR, 1);
+		day22.add(Calendar.HOUR, 4);
+		day23.add(Calendar.WEEK_OF_YEAR, 1);
+		day23.add(Calendar.HOUR, 5);
+		
+		day3.add(Calendar.WEEK_OF_YEAR, 2);
+		day31.add(Calendar.WEEK_OF_YEAR, 2);
+		day31.add(Calendar.HOUR, 2);
+		day32.add(Calendar.WEEK_OF_YEAR, 2);
+		day32.add(Calendar.HOUR, 5);
+		day33.add(Calendar.WEEK_OF_YEAR, 2);
+		day33.add(Calendar.HOUR, 6);
+		
+		day4.add(Calendar.WEEK_OF_YEAR, 4);
+		day41.add(Calendar.WEEK_OF_YEAR, 4);
+		day41.add(Calendar.HOUR, 1);
+		day42.add(Calendar.WEEK_OF_YEAR, 4);
+		day42.add(Calendar.HOUR, 4);
+		day43.add(Calendar.WEEK_OF_YEAR, 4);
+		day43.add(Calendar.HOUR, 5);
+		day44.add(Calendar.WEEK_OF_YEAR, 4);
+		day44.add(Calendar.HOUR, 7);
+		day45.add(Calendar.WEEK_OF_YEAR, 4);
+		day45.add(Calendar.HOUR, 8);
+		
+		day5.add(Calendar.WEEK_OF_YEAR, 7);
+		day51.add(Calendar.WEEK_OF_YEAR, 7);
+		day51.add(Calendar.HOUR, 1);
+		day52.add(Calendar.WEEK_OF_YEAR, 7);
+		day52.add(Calendar.HOUR, 4);
+		day52.add(Calendar.MINUTE, 30);
+		day53.add(Calendar.WEEK_OF_YEAR, 7);
+		day53.add(Calendar.HOUR, 6);
+		
+		day6.add(Calendar.WEEK_OF_YEAR, 8);
+		day61.add(Calendar.WEEK_OF_YEAR, 8);
+		day61.add(Calendar.HOUR, 2);
+		day62.add(Calendar.WEEK_OF_YEAR, 8);
+		day62.add(Calendar.HOUR, 5);
+		day62.add(Calendar.MINUTE, 30);
+		day63.add(Calendar.WEEK_OF_YEAR, 8);
+		day63.add(Calendar.HOUR, 6);
+		
+		BasicEvent event01 = new BasicEvent(0, "event01", day0, day01);
+		BasicEvent event02 = new BasicEvent(1, "event02", day02, day03);
+		BasicEvent event03 = new BasicEvent(2, "event03", day04, day05);
+		BasicEvent event10 = new BasicEvent(3, "event10", day1, day11);
+		BasicEvent event11 = new BasicEvent(4, "event11", day12, day13);
+		BasicEvent event12 = new BasicEvent(5, "event12", day14, day15);
+		BasicEvent event20 = new BasicEvent(6, "event20", day2, day21);
+		BasicEvent event21 = new BasicEvent(7, "event21", day22, day23);
+		BasicEvent event30 = new BasicEvent(8, "event30", day3, day31);
+		BasicEvent event31 = new BasicEvent(9, "event31", day32, day33);
+		BasicEvent event40 = new BasicEvent(10, "event40", day4, day41);
+		BasicEvent event41 = new BasicEvent(11, "event41", day42, day43);
+		BasicEvent event42 = new BasicEvent(12, "event42", day44, day45);
+		BasicEvent event50 = new BasicEvent(13, "event50", day5, day51);
+		BasicEvent event51 = new BasicEvent(14, "event51", day52, day53);
+		BasicEvent event60 = new BasicEvent(15, "event60", day6, day61);
+		BasicEvent event61 = new BasicEvent(16, "event61", day62, day63);
+		
+		futureEvents.addEvent(event01);
+		System.out.println(futureEvents);
+		presentEvents.addEvent(event01);
+		System.out.println(presentEvents);
+	}
+
+}
