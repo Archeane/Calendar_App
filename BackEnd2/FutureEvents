@@ -1,0 +1,192 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+public class FutureEvents {
+
+	private List<BasicEvent>[] futureEvents;
+	private int accountingYears;
+	private List<BasicEvent> allEvents;
+	
+	private int startYear;
+	private int startDay;
+	
+	private Utility utility;
+	
+	public FutureEvents(int accountingYears, int startYear, int startDay){
+		this.accountingYears = accountingYears;
+		futureEvents = (ArrayList<BasicEvent>[]) new ArrayList[accountingYears*365];
+		allEvents = new ArrayList<BasicEvent>();
+		
+		Calendar currentTime = Calendar.getInstance();
+		this.startYear = startYear;
+		this.startDay = startDay;
+		utility = new Utility();
+		
+		
+	}
+	
+	/**
+	 * Adds an event to futureEvents that corresponds to the events starting time. List is sorted
+	 * @param e
+	 * @throws IllegalArgumentException
+	 * 		Indicates the param event is null
+	 */
+	public void addEvent(BasicEvent e) throws IllegalArgumentException{
+		if(e == null){
+			throw new IllegalArgumentException("The param event is null");
+		}
+		Calendar eStartTime = e.getStartTime();
+		Date eTime = eStartTime.getTime();
+		int eYear = eStartTime.get(Calendar.YEAR);
+		int eDay = eStartTime.get(Calendar.DAY_OF_YEAR);
+		
+		int index = (eYear-startYear)*365 + eDay;
+		
+		if(index >= futureEvents.length){
+			addToEventsList(e);
+			return;
+		}else if(index < 0){
+			throw new IllegalArgumentException("The index cooresponding to the event is smaller than 0");
+		}
+		
+		
+		//Add the event to the corresponding index in sorted order
+		if(futureEvents[index] == null){
+			futureEvents[index] = new ArrayList<BasicEvent>();
+			futureEvents[index].add(e);
+			return;
+		}else{
+			if(utility.compare(1, futureEvents[index].get(0).getStartTime(), e.getStartTime()) >= 0){
+				futureEvents[index].add(0,e);
+				return;
+			}else{
+				for(int i = 1; i < futureEvents[index].size(); i++){
+					if(utility.compare(1, futureEvents[index].get(i).getStartTime(), e.getStartTime()) >= 0){
+						futureEvents[index].add(0,e);
+						return;
+					}
+				}
+				futureEvents[index].add(futureEvents[index].size(),e);
+			}
+		}
+	}
+
+	/**
+	 * Deletes the event corresponding to the id and position in futureEvents.
+	 * @param startTime
+	 * @param id
+	 * @return
+	 * @throws EventNotFoundException
+	 */
+	public BasicEvent deleteEvent(Calendar startTime, int id) throws EventNotFoundException, IllegalArgumentException{
+		int eYear = startTime.YEAR;
+		int eDay = startTime.DAY_OF_YEAR;
+		
+		int index = (eYear-startYear)*365 + eDay;
+		
+		if(index >= futureEvents.length){
+			return deleteFromEventsList(id);
+		}else if(index < 0){
+			throw new IllegalArgumentException("The index cooresponding to the event is smaller than 0");
+		}
+		
+		if(futureEvents[index] == null){
+			throw new EventNotFoundException("The index corresponding to the startTime has a null list");
+		}
+		for(int i = 0; i < futureEvents[index].size(); i++){
+			if(futureEvents[index].get(i).getId() == id){
+				return futureEvents[index].remove(i);
+			}
+		}
+		throw new EventNotFoundException("The event was not found at the start time");
+	}
+	
+	/**
+	 * Adds to the list containing events outside of the range covered in futureEvents
+	 * @param e
+	 */
+	public void addToEventsList(BasicEvent e){
+		allEvents.add(e);
+	}
+	
+	/**
+	 * Deletes the event corresponding to the id in allEvents list
+	 * @param id
+	 * @return
+	 * @throws EventNotFoundException
+	 */
+	public BasicEvent deleteFromEventsList(int id)throws EventNotFoundException{
+		for(int i = 0; i < allEvents.size(); i++){
+			if(allEvents.get(i).getId() == id){
+				return allEvents.remove(i);
+			}
+		}
+		throw new EventNotFoundException("No event with id "+id+" was found in allEvents list");
+	}
+	
+	/**
+	 * Refreshes the events in futureEvents when start year changes. 
+	 * 1. Move events forward
+	 * 2. Delete leftover entries
+	 * 3. Moves events in allEvents into futureEvents
+	 */
+	public void refreshCalendar(){
+		int beginIndex = startYear*365+startDay;
+		for(int i = beginIndex; i < futureEvents.length; i++){
+			futureEvents[i-beginIndex] = futureEvents[i];
+		}
+		for(int i = futureEvents.length-beginIndex; i < futureEvents.length; i++){
+			futureEvents[i] = null;
+		}
+		for(int i = 0; i < allEvents.size(); i++){
+			Calendar eStartTime = allEvents.get(i).getStartTime();
+			int eYear = eStartTime.YEAR;
+			int eDay = eStartTime.DAY_OF_YEAR;
+			int index = (eYear-startYear)*365 + eDay;
+			
+			if(index < futureEvents.length){
+				addEvent(allEvents.get(i));
+			}
+		}
+	}
+	
+	
+	public boolean isCorrectIndex(Calendar time, int index){
+		//index given corresponds to a specific day of the year. If events in futureEvents[index] have the same day as index indicates, return true
+		int year = index / 365;
+		int day = index % 365;
+		
+		int tYear = time.YEAR;
+		int tDay = time.DAY_OF_YEAR;
+		
+		return year == tYear && day == tDay;
+	}
+	
+	public List<BasicEvent> getIndex(int index){
+		if(futureEvents[index] != null){
+			return futureEvents[index];
+		}
+		return null;
+	}
+	
+	public String toString(){
+		String str = "";
+		for(int i = 0; i < futureEvents.length; i++){
+			if(futureEvents[i] != null){
+				System.out.println("The "+i+"th index in future events contains events:");
+				for(int j = 0; j < futureEvents[i].size(); j++){
+					str += futureEvents[i].get(j).toString();
+				}
+				System.out.println();
+			}
+		}
+		return str;
+	}
+	
+	
+	
+	
+	
+}
