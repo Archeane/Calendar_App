@@ -1,0 +1,35 @@
+import java.util.Calendar;
+
+public class Utility {
+	
+	public Utility(){
+	}
+
+	/**
+	 * Compares a Calendar object to another Calendar object with tolerance in mind 
+	 * @param n	- this Calendar
+	 * @param n1 - other Calendar
+	 * @return
+	 * 		0 if the firstEventDate are equal				PASS
+	 * 		1 if this node is greater than param node		PASS
+	 * 		-1 if this node is less than param node			PASS
+	 * @throws IllegalArgumentException
+	 * 		Indicates a node has null data			PASS
+	 * 		Indicates a node is null				PASS
+	 */
+	public int compare(int toleranceInMins, Calendar thisStartTime, Calendar otherStartTime) throws IllegalArgumentException{
+		if(thisStartTime == null || otherStartTime == null){
+			throw new IllegalArgumentException("The param calender is null");
+		}
+		long firstEventDateInMillis = thisStartTime.getTimeInMillis();
+		long nFirstEventDateInMillis = otherStartTime.getTimeInMillis();
+		
+		long tolerance = 60000 * toleranceInMins; 
+		if(Math.abs(firstEventDateInMillis-nFirstEventDateInMillis) <= tolerance){
+			return 0;
+		}else if(firstEventDateInMillis + tolerance < nFirstEventDateInMillis){
+			return -1;
+		}
+		return 1;
+	}
+}
