@@ -1,0 +1,46 @@
+import java.util.Calendar;
+
+public class BasicEvent {
+
+	private int id;					
+	private String name;
+	private String location;
+	private Calendar startTime;
+	private Calendar endTime;
+	
+	public BasicEvent(){}
+	
+	/**
+	 * TODO: Add a rule that a new id cannot be the same as a previous id
+	 * @param id
+	 * @param name
+	 * @param startTime
+	 * @param endTime
+	 */
+	public BasicEvent(int id, String name, Calendar startTime, Calendar endTime){
+		this.id = id;
+		this.name = name;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	public int getId(){
+		return id;
+	}
+	
+	public void setId(int id){
+		this.id = id;
+	}
+	
+	public Calendar getStartTime(){
+		return startTime;
+	}
+	
+
+	public Calendar getEndTime(){
+		return endTime;
+	}
+	public String toString(){
+		return name + " starts at time "+startTime.getTime()+", ends at time "+endTime.getTime();
+	}
+}
