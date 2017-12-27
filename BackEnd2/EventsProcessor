@@ -147,10 +147,44 @@ public class EventsProcessor {
 		BasicEvent event60 = new BasicEvent(15, "event60", day6, day61);
 		BasicEvent event61 = new BasicEvent(16, "event61", day62, day63);
 		
-		futureEvents.addEvent(event01);
-		System.out.println(futureEvents);
-		presentEvents.addEvent(event01);
+		try {
+			presentEvents.addEvent(event01);
+			futureEvents.addEvent(event60);
+			presentEvents.addEvent(event11);
+			presentEvents.addEvent(event12);
+			//presentEvents.addEvent(event30);
+			futureEvents.addEvent(event51);
+			futureEvents.addEvent(event31);
+			futureEvents.addEvent(event10);
+			futureEvents.addEvent(event21);
+			futureEvents.addEvent(event50);
+			futureEvents.addEvent(event40);
+			futureEvents.addEvent(event61);
+			futureEvents.addEvent(event20);
+			futureEvents.addEvent(event41);
+			futureEvents.addEvent(event42);
+			
+		} catch (IllegalArgumentException | MisplacedEventException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Calendar newPresentEventTime = Calendar.getInstance();
+		newPresentEventTime.add(Calendar.WEEK_OF_YEAR, 2);
+		try {
+			presentEvents.refreshCalendar(newPresentEventTime);
+		} catch (IllegalArgumentException | MisplacedEventException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//futureEvents.refreshCalendar(366);
+		
+		System.out.println(presentEvents.getFirstEventDate().getTime().toString());
 		System.out.println(presentEvents);
+		
+		System.out.println(futureEvents);
+		
+		//System.out.println(futureEvents.isCorrectIndex(day0, 1));
 	}
 
 }
