@@ -33,36 +33,90 @@ public class PresentEvents {
 		presentEvents = new boolean[daysOfAvilability][numOfTimeSlots];
 	}
 
-	public void addEvent(BasicEvent e) throws IllegalArgumentException{
+	/**
+	 * Marks the time interval between the start and end time of param event to true
+	 * @param e
+	 * @throws IllegalArgumentException
+	 * @throws MisplacedEventException 
+	 * Test cases:
+	 * 1. Adding events within range of presentEvents
+	 * 		a. Adding an event within a day				PASS
+	 * 		b. Adding an overnight event				PASS
+	 * 		c. Adding a event lasting a long time		PASS
+	 * 		d. Overlapping events
+	 * 2. Adding event with very close approximate to present events		
+	 * 		a. Adding event with startTime earilier than current time but an end time later		PASS
+	 * 		b. 
+	 * 
+	 * 
+	 */
+	public void addEvent(BasicEvent e) throws IllegalArgumentException, MisplacedEventException{
+		//if the param contains null arguments
 		if(e == null || e.getStartTime() == null || e.getEndTime() == null){
 			throw new IllegalArgumentException("The param event has null properties");
 		}
+		
+		//Check if end time of the event passes the current calendar time
+		int comparsion = utility.compare(10, e.getEndTime(), Calendar.getInstance());
+		if(comparsion < 0){
+			throw new MisplacedEventException("Param event does not belong in present events.", comparsion);
+		}
+		
+		//Finds the day index in presentEvents for the start time of the event
 		Calendar eStartTime = e.getStartTime();
-		int eYear = eStartTime.YEAR;
-		int eDay = eStartTime.DAY_OF_YEAR;
+		int eYear = eStartTime.get(Calendar.YEAR);
+		int eDay = eStartTime.get(Calendar.DAY_OF_YEAR);
 		int index = 0;
 		if(eYear == firstEventYear){
-			index = eDay;
+			index = eDay-firstEventDay;
 		}else if(eYear > firstEventYear){
 			index = (365-firstEventDay)+eDay;
 		}
 		
+		//if day index of the event does not belong in the range of presentEvents
 		if(index < 0 || index >= presentEvents.length){
 			throw new IllegalArgumentException("The event does not belong in present events");
 		}
 		
-		int eStartHour = eStartTime.HOUR_OF_DAY;
-		int eStartMin = eStartTime.MINUTE;
+		int eStartHour = eStartTime.get(Calendar.HOUR_OF_DAY);
+		int eStartMin = eStartTime.get(Calendar.MINUTE);
 		int eStartIndex = eStartHour * (60/timeSlotLength) + (int)(eStartMin/timeSlotLength);
 		
 		Calendar eEndTime = e.getEndTime();
-		int eEndHour = eEndTime.HOUR_OF_DAY;
-		int eEndMin = eEndTime.MINUTE;
+		int eEndHour = eEndTime.get(Calendar.HOUR_OF_DAY);
+		int eEndMin = eEndTime.get(Calendar.MINUTE);
 		int eEndIndex = eEndHour * (60/timeSlotLength) + (int)((eEndMin+timeSlotLength-1)/timeSlotLength);
 		
-		for(int i = eStartIndex; i <= eEndIndex; i++){
-			presentEvents[index][i] = true;
+		//check if event is overnight or over year
+		int endYear = eEndTime.get(Calendar.YEAR);
+		int endDay = eEndTime.get(Calendar.DAY_OF_YEAR);
+		
+		//if Event is same day event
+		if(endYear == eYear && endDay == eDay){
+			for(int i = eStartIndex; i <= eEndIndex; i++){
+				presentEvents[index][i] = true;
+			}
+		}else{	//if event is more than 1 day
+			int endIndex = (endYear - eYear) * 365 + (endDay-firstEventDay);
+			if(endIndex >= presentEvents.length){
+				throw new IllegalArgumentException("The end time of param event exceeds present Events range");
+			}
+			for(int time = eStartIndex; time < presentEvents[index].length; time++){
+				presentEvents[index][time] = true;
+			}
+			
+			//Marking all time slots from (index of event start time + 1) to 00:00 of the event end day
+			for(int i = index+1; i < endIndex; i++){
+				for(int j = 0; j < presentEvents[i].length; j++){
+					presentEvents[i][j] = true;
+				}
+			}
+			//Marking from 00:00 on event end day to event end time to true
+			for(int i = 0; i < eEndIndex; i++){
+				presentEvents[endIndex][i] = true;
+			}
 		}
+		
 		
 	}
 	
