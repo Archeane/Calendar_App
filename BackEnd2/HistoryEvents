@@ -1,0 +1,24 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class HistoryEvents {
+
+	private List<BasicEvent> historyEvents;
+	private Calendar lastEventDate;
+	
+	public HistoryEvents(Calendar lastEventDate){
+		historyEvents = new ArrayList<BasicEvent>();
+		this.lastEventDate = lastEventDate;
+	}
+	
+	public void addEvent(BasicEvent e) throws MisplacedEventException{
+		Utility utility = new Utility();
+		int compare = utility.compare(10, lastEventDate, e.getStartTime());
+		if(compare < 0){
+			throw new MisplacedEventException("Param event does not belong in history events", compare);
+		}
+		historyEvents.add(e);
+	}
+	
+}
