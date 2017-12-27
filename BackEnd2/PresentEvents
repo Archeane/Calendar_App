@@ -148,6 +148,7 @@ public class PresentEvents {
 	public String toString(){
 		String str = "";
 		for(int i = 0; i < presentEvents.length; i++){
+			str += i;
 			for(int j = 0; j < presentEvents[i].length; j++){
 				if(presentEvents[i][j] == true){
 					str += " T ";
