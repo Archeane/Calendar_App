@@ -5,7 +5,7 @@ public class PresentEvents {
 	
 	private boolean[][] presentEvents;		//False indicates free, true indicates not free
 	
-	private Calendar firstEventTime;
+	private Calendar firstEventDate;
 	private int firstEventYear;						//Indicates the first date that presentEvents starts 
 	private int firstEventDay;
 	private int firstEventIndex;							//Stores the index in futureEvents that corresponds to firstEventTime
@@ -13,12 +13,17 @@ public class PresentEvents {
 	private int daysOfAvilability;					//How many days are in presentEvents;
 	private int timeSlotLength;						//how many minutes are in each time slot
 	
+	private Utility utility;
+	
 	public PresentEvents(Calendar firstEventTime, int daysOfAvilability, int timeSlotLength) throws IllegalArgumentException{
+		utility = new Utility();
+		
 		int initStartYear = EventsProcessor.initStartYear;				//The year that the calendar was first initialized in. Corresponds to the startYear in FutureEvents
 		int initStartDay = EventsProcessor.initStartDay;	     		//The day of the year that the calendar was first initialized in.
 		
-		firstEventYear = firstEventTime.YEAR;
-		firstEventDay = firstEventTime.DAY_OF_YEAR;
+		firstEventDate = firstEventTime;
+		firstEventYear = firstEventTime.get(Calendar.YEAR);
+		firstEventDay = firstEventTime.get(Calendar.DAY_OF_YEAR);
 		
 		firstEventIndex = (firstEventYear-initStartYear)*365 + (firstEventDay - initStartDay);
 		
@@ -161,7 +166,9 @@ public class PresentEvents {
 		return str;
 	}
 	
-	
+	public Calendar getFirstEventDate(){
+		return firstEventDate;
+	}
 	
 	
 	
