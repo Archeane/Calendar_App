@@ -120,12 +120,13 @@ public class PresentEvents {
 		
 	}
 	
-	public void refreshCalendar(Calendar firstEventTime){
+	public void refreshCalendar(Calendar firstEventTime) throws IllegalArgumentException, MisplacedEventException{
 		int initStartYear = EventsProcessor.initStartYear;				//The year that the calendar was first initialized in. Corresponds to the startYear in FutureEvents
 		int initStartDay = EventsProcessor.initStartDay;	     		//The day of the year that the calendar was first initialized in.
 		
-		firstEventYear = firstEventTime.YEAR;
-		firstEventDay = firstEventTime.DAY_OF_YEAR;
+		firstEventDate = firstEventTime;
+		firstEventYear = firstEventTime.get(Calendar.YEAR);
+		firstEventDay = firstEventTime.get(Calendar.DAY_OF_YEAR);
 		
 		firstEventIndex = (firstEventYear-initStartYear)*365 + (firstEventDay - initStartDay);
 		for(int i = 0; i < presentEvents.length; i++){
