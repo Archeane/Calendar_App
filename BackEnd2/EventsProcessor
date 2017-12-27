@@ -2,7 +2,7 @@ import java.util.Calendar;
 
 public class EventsProcessor {
 	
-	private Calendar initTime;
+	private static Calendar initTime;
 	
 	public static int initStartYear;
 	public static int initStartDay;
@@ -10,22 +10,19 @@ public class EventsProcessor {
 	public static FutureEvents futureEvents;
 	public static PresentEvents presentEvents;
 	
-	public EventsProcessor(){
+	public EventsProcessor(int presentEventSpan, int presentEventTimeSlot, int futureEventYears){
 		initTime = Calendar.getInstance();
-		initStartYear = initTime.YEAR;
-		initStartDay = initTime.DAY_OF_YEAR;
+		initStartYear = initTime.get(Calendar.YEAR);
+		initStartDay = initTime.get(Calendar.DAY_OF_YEAR);
 		
-		presentEvents = new PresentEvents(initTime, 14, 15);
-		futureEvents = new FutureEvents(5, 2017, 359);
+		presentEvents = new PresentEvents(initTime, presentEventSpan, presentEventTimeSlot);
+		futureEvents = new FutureEvents(futureEventYears, initStartYear, initStartDay);
 	}
 	
+
+	
 	public static void main(String[] args){
-		Calendar initTime = Calendar.getInstance();
-		initStartYear = initTime.YEAR;
-		initStartDay = initTime.DAY_OF_YEAR;
-		
-		presentEvents = new PresentEvents(initTime, 14, 15);
-		futureEvents = new FutureEvents(5, 2017, 359);
+		EventsProcessor temp = new EventsProcessor(14, 60, 5);
 		
 		initialize();
 	}
